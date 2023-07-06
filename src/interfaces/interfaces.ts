@@ -15,7 +15,6 @@ export interface ProductContextProps {
   product: Product;
 }
 
-
 export interface ProductInCart extends Product {
   counter: number;
 }
@@ -30,9 +29,12 @@ export interface ProductCardsHOCProps {
   Buttons: (Props: ProductButtonProps) => JSX.Element;
 }
 
-
 export interface onChangeArg {
-  product: Product
-  counter: number
+  product: Product;
+  counter: number;
+}
 
+export interface InitialValues {
+  count?: number;
+  maxCount?: number;
 }
