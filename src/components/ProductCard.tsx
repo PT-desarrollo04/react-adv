@@ -6,6 +6,7 @@ import { ReactElement, createContext } from "react";
 import {
   InitialValues,
   Product,
+  ProductCardHandlers,
   ProductContextProps,
   onChangeArg,
 } from "../interfaces/interfaces";
@@ -14,7 +15,7 @@ export interface Props {
   product: Product;
   value?: number;
   // children?: ReactElement | ReactElement[];
-  children: (mensaje : string) => JSX.Element;
+  children: (args: ProductCardHandlers) => JSX.Element;
   className?: string;
   style?: React.CSSProperties;
   onChange?: (args: onChangeArg) => void;
@@ -34,20 +35,29 @@ export const ProductCard = ({
   value,
   initialValues,
 }: Props) => {
-  const { counter, increaseBy } = useProducts({
-    product,
-    onChange,
-    value,
-    initialValues,
-  });
+  const { counter, increaseBy, maxCount, isMaxCountReached, reset } =
+    useProducts({
+      product,
+      onChange,
+      value,
+      initialValues,
+    });
 
   return (
-    <Provider value={{ counter, increaseBy, product }}>
+    <Provider value={{ counter, increaseBy, product, maxCount }}>
       <div style={style} className={`${styles.productCard} ${className}`}>
         {/* {children} */}
 
         {/* // DE ESTA MANERA EJECUTAMOS UNA FUNCION  QUE DEVUELVE JSX */}
-        {children('HOLA MUNDO')}
+        {children({
+          count: counter,
+          isMaxCountReached,
+          maxCount: initialValues?.maxCount,
+          product,
+
+          increaseBy,
+          reset,
+        })}
 
         {/* esto se renderisa super bien y se llama Component patter  */}
         {/* <ProductImage img={product.img} /> */}

@@ -8,6 +8,12 @@ interface useProductArgs {
   initialValues?: InitialValues;
 }
 
+const url =
+  "https://app.powerbi.com/view?r=eyJrIjoiZDQ4N2JhNmYtYTFmNC00ZmM0LWE5YWUtYjNlNmE4YmNkMDIzIiwidCI6IjhlZGRjOTE5LTMxNzEtNDYwZC04NGE0LWIzMGFlNjVlMzdjMyJ9";
+
+console.log(encodeURI(url)); //https://app.powerbi.com/view?r=eyJrIjoiZDQ4N2JhNmYtYTFmNC00ZmM0LWE5YWUtYjNlNmE4YmNkMDIzIiwidCI6IjhlZGRjOTE5LTMxNzEtNDYwZC04NGE0LWIzMGFlNjVlMzdjMyJ9
+console.log(encodeURIComponent(url)); //https%3A%2F%2Fhttps://app.powerbi.com/view?r=eyJrIjoiZDQ4N2JhNmYtYTFmNC00ZmM0LWE5YWUtYjNlNmE4YmNkMDIzIiwidCI6IjhlZGRjOTE5LTMxNzEtNDYwZC04NGE0LWIzMGFlNjVlMzdjMyJ9
+
 export const useProducts = ({
   onChange,
   product,
@@ -16,9 +22,7 @@ export const useProducts = ({
 }: useProductArgs) => {
   const [counter, setcounter] = useState<number>(initialValues?.count || value);
 
-  console.log(initialValues?.maxCount);
-
-  console.log(counter);
+  let maxCount = initialValues?.maxCount;
 
   const isMounted = useRef(false);
 
@@ -42,6 +46,10 @@ export const useProducts = ({
     onChange && onChange({ counter: newValue, product });
   };
 
+  const reset = () => {
+    setcounter(initialValues?.count || value);
+  };
+
   useEffect(() => {
     if (!isMounted.current) return;
 
@@ -56,5 +64,9 @@ export const useProducts = ({
     counter,
     increaseBy,
     initialValues,
+    isMaxCountReached:
+      !!initialValues?.count && initialValues.maxCount === counter,
+    maxCount,
+    reset,
   };
 };
